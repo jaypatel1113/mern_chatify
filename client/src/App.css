@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Open+Sans:wght@400;600;700&family=Poppins:wght@200;300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: 'Poppins', sans-serif; */
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'Open Sans', sans-serif;
+}
+
+input[type="file"]::file-selector-button {
+    color: #666;
+    font-weight: 500;
+    background: transparent;
+    height: 100%;
+    padding: 0;
+    padding-right: 30px;
+    border: none;
+    outline: none;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.inputRounded .MuiOutlinedInput-root{
+    border-radius: 30px;
+    padding: 0 20px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.281);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
