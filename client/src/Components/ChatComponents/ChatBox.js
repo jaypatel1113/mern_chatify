@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 import { Box, IconButton, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { IoCaretBackCircle } from "react-icons/io5";
 import { FaEye } from "react-icons/fa";
-import io from "socket.io-client";
 
 import ProfileModal from "../SubComponents/Models/ProfileModal";
 import GroupDetailModel from "../SubComponents/Models/ChatDetailModal";
@@ -15,13 +15,13 @@ import LoadingMessageAnimation from "../SubComponents/Animations/LoadingMessageA
 import { fetchAllMessages, sendMessage } from "../../Redux/Actions/Message";
 import { changeSelectedChat } from "../../Redux/Actions/Chat";
 import { getSender, getSenderFull } from "../../Config/ChatLogics";
-import { addNotification } from "../../Redux/Actions/User";
+import { deleteNotification, fetchNotifications, sendNotification } from "../../Redux/Actions/Notification";
 
 
 const ENDPOINT = process.env.REACT_APP_BACKEND_LINK;
 var socket, selectedChatCompare;
 
-const ChatBox = () => {
+const ChatBox = ({setMsg, msg}) => {
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [socketConnected, setSocketConnected] = useState(false);
@@ -31,7 +31,7 @@ const ChatBox = () => {
 
     const dispatch = useDispatch();
 
-    const { user, notifications } = useSelector((state) => state.user);
+    const { user } = useSelector((state) => state.user);
     const { selectedChat, loading } = useSelector((state) => state.chat);
     const { allMessages } = useSelector((state) => state.message);
 
@@ -52,19 +52,29 @@ const ChatBox = () => {
     
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(fetchAllMessages(selectedChat?._id));
-            socket.emit("join chat", selectedChat._id);
-    
+            if(selectedChat !== null) {
+                await dispatch(fetchAllMessages(selectedChat?._id));
+                socket.emit("join chat", selectedChat._id);
+            }
             selectedChatCompare = selectedChat;
         }
         fetchData();
-    }, [messages, dispatch]);
+    }, [selectedChat, messages, dispatch]);
 
     useEffect(() => {
-        selectedChatCompare = selectedChat;
-    }, [selectedChat]);
-    
-    
+        if(selectedChat !== null) {
+            selectedChatCompare = selectedChat;
+        }
+        const fetchData = async () => {
+            if(selectedChatCompare?._id) {
+                await dispatch(deleteNotification(selectedChatCompare._id));
+                await dispatch(fetchNotifications());
+            }
+        }
+        fetchData();
+    }, [selectedChat?._id, dispatch, selectedChat]);
+
+
 
     const handleClick = () => {
         dispatch(changeSelectedChat(null));
@@ -81,6 +91,8 @@ const ChatBox = () => {
             // sent msg fetch from store and sent to server
             socket.emit("new message", data.message)
             setDisableTextField(false);
+
+            dispatch(sendNotification(selectedChatCompare._id));
         }
     };
     const typingHandler = (e) => {
@@ -105,7 +117,6 @@ const ChatBox = () => {
             setTyping(false);
         }
         }, timerLength);
-
     };
     
 
@@ -118,20 +129,7 @@ const ChatBox = () => {
                 selectedChatCompare._id !== newMessageReceived.chat._id
             ) {
                 // give notification
-                // console.log(newMessageReceived);
-                // console.log(notifications);
-
-                // const isIncluded = notifications?.find((noti) => noti?.chat?._id === newMessageReceived?.chat?._id) ? true : false;
-                // console.log(isIncluded);
-
-                console.log(notifications.includes(newMessageReceived));
-                // console.log(notifications.find((newMessageReceived) => newMessageReceived.chat._id === notifications.chat._id));
-                
-                if (!notifications.includes(newMessageReceived)) {
-                // if (!isIncluded) {
-                    dispatch(addNotification([...notifications, newMessageReceived]))
-                    // setNotifications([newMessageReceived, ...notifications]);
-                }
+                setMsg([...msg, newMessageReceived.chat._id]);
             } else {
                 setMessages([...messages, newMessageReceived]);
             }
@@ -146,6 +144,7 @@ const ChatBox = () => {
                 height: 500,
                 display: "flex",
                 flexDirection: "column",
+                marginTop: -4,
             }}
         >
             <Box

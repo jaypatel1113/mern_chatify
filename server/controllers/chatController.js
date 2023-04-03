@@ -74,7 +74,8 @@ export const createGroupChat = async (req, res) => {
         if (!req.body.users || !req.body.name) {
             return res.status(400).json({ success: false, message: "Please Fill all the fields 🫤" });
         }
-
+        const grpName = req.body.name; 
+        var chatName = grpName[0].toUpperCase() + grpName.substring(1);
         var users = JSON.parse(req.body.users);
 
         if (users.length < 2) {
@@ -84,7 +85,7 @@ export const createGroupChat = async (req, res) => {
         users.push(req.user);
 
         const groupChat = await Chat.create({
-            chatName: req.body.name,
+            chatName,
             users,
             isGroupChat: true,
             groupAdmin: req.user,

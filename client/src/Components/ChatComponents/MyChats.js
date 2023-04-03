@@ -7,9 +7,9 @@ import { HiUserGroup } from "react-icons/hi";
 
 import GroupChatModel from "../SubComponents/Models/GroupChatModel";
 import DisplayDateTime from "../SubComponents/DisplayDateTime";
+import LoadingChatAnimation from "../SubComponents/Animations/LoadingChatAnimation";
 import { getSender, getSenderAvtarUrl } from "../../Config/ChatLogics";
 
-import LoadingChatAnimation from "../SubComponents/Animations/LoadingChatAnimation";
 
 const MyChats = () => {
     const { user, notifications } = useSelector((state) => state.user);
@@ -38,6 +38,7 @@ const MyChats = () => {
                         textAlign: "center",
                         display: "flex",
                         flexDirection: "column",
+                        marginTop: -4,
                     }}
                 >
                     <Box
@@ -146,9 +147,12 @@ const MyChats = () => {
                                                                 ? "You" 
                                                                 : chat?.latestMessage?.sender.name.split(" ")[0]
                                                             }
-                                                            : {chat?.latestMessage?.content.length > 25
+                                                            : 
+                                                            {
+                                                                chat?.latestMessage?.content.length > 25
                                                                 ? `${chat?.latestMessage?.content.slice(0, 25)}...` 
-                                                                : chat?.latestMessage?.content }
+                                                                : chat?.latestMessage?.content 
+                                                            }
                                                         </Typography>
                                                     )
                                                 }

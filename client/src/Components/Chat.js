@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import ChatBox from "./ChatComponents/ChatBox";
 import MyChats from "./ChatComponents/MyChats";
 import TopMenu from "./ChatComponents/TopMenu";
+import NotificationMenu from "./SubComponents/NotificationMenu";
+
+import {fetchNotifications } from "../Redux/Actions/Notification";
 
 const Chat = () => {
     const [showChatList, setShowChatList] = useState(true);
+    const [msg, setMsg] = useState([]);
 
     const { user } = useSelector((state) => state.user);
     const { selectedChat } = useSelector((state) => state.chat);
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         selectedChat ? setShowChatList(false) : setShowChatList(true);
     }, [selectedChat]);
+    
+    useEffect(() => {
+        dispatch(fetchNotifications());
+    }, [msg, dispatch]);
 
     return (
         <>
@@ -30,8 +40,9 @@ const Chat = () => {
                         }}
                         px={4}
                     >
-                        {showChatList ? <MyChats /> : <ChatBox />}
+                        {showChatList ? <MyChats /> : <ChatBox setMsg={setMsg} msg={msg} />}
                     </Box>
+                    <NotificationMenu />
                 </Box>
             )}
         </>

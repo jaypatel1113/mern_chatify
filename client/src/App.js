@@ -12,6 +12,7 @@ import AuthRoutes from "./ProtectedRoutes/AuthRoutes";
 
 import { getUser } from "./Redux/Actions/User";
 import { fetchAllChats } from "./Redux/Actions/Chat";
+import { fetchNotifications } from "./Redux/Actions/Notification";
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
@@ -20,6 +21,7 @@ const App = () => {
     const { message, error, isAuthenticated, initalLoading, isLogin } = useSelector((state) => state.user);
     const { message: chatMsg, error: chatErr } = useSelector((state) => state.chat);
     const { error: messErr } = useSelector((state) => state.message);
+    const { error: notiErr, message: notiMess } = useSelector((state) => state.notifications);
     
     const dispatch = useDispatch();
 
@@ -27,6 +29,7 @@ const App = () => {
         const loadData = async () => {
             await dispatch(getUser());
             await dispatch(fetchAllChats());
+            await dispatch(fetchNotifications());
         }
         loadData();
     }, [isLogin, dispatch]);
@@ -45,6 +48,10 @@ const App = () => {
             toast.error(messErr, {toastId: messErr});
             dispatch({ type: "CLEAR_ERROR" });
         }
+        if (notiErr) {
+            // toast.success(notiErr, {toastId: notiErr});
+            dispatch({ type: "CLEAR_ERROR" });
+        }
         if (message) {
             toast.success(message, {toastId: message});
             dispatch({ type: "CLEAR_MESSAGE" });
@@ -53,7 +60,11 @@ const App = () => {
             toast.success(chatMsg, {toastId: chatMsg});
             dispatch({ type: "CLEAR_MESSAGE" });
         }
-    }, [error, message, messErr, chatErr, chatMsg, dispatch]);
+        if (notiMess) {
+            // toast.success(notiMess, {toastId: notiMess});
+            dispatch({ type: "CLEAR_MESSAGE" });
+        }
+    }, [error, message, notiErr, messErr, chatErr, chatMsg, notiMess, dispatch]);
 
     return (
         <>

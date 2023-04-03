@@ -3,7 +3,6 @@ import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
     loading: false,
     initalLoading: false,
-    notifications: [],
 };
 
 export const userReducer = createReducer(initialState, {
@@ -77,18 +76,6 @@ export const userReducer = createReducer(initialState, {
     SEARCH_FAILURE: (state, action) => {
         state.loading = false;
         state.searchResult = [];
-        state.error = action.payload;
-    },
-
-    NOTIFICATION_REQUEST: (state) => {
-        state.loading = true;
-    },
-    NOTIFICATION_SUCCESS: (state, action) => {
-        state.loading = false;
-        state.notifications = action.payload;
-    },
-    NOTIFICATION_FAILURE: (state, action) => {
-        state.loading = false;
         state.error = action.payload;
     },
     

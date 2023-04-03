@@ -1,5 +1,6 @@
 import { Notification } from "../model/notificationModel.js";
 import { Chat } from "../model/chatModel.js";
+import { User } from "../model/userModel.js";
 
 export const addNewNotification = async (req, res) => {
     try {
@@ -17,7 +18,6 @@ export const addNewNotification = async (req, res) => {
 
         users.forEach(async (user) => {
             if (user._id.equals(req.user._id)) {
-                console.log("here");
                 return;
             }
 
@@ -62,7 +62,7 @@ export const deleteNotification = async (req, res) => {
         });
         res.status(200).json({
             success: true,
-            notification: "Notication Deleted",
+            message: "Notication Deleted",
         });
     } catch (error) {
         return res.status(400).json({ success: false, message: error.message });
@@ -73,7 +73,12 @@ export const fetchNotifications = async (req, res) => {
     try {
         var notificationItems = await Notification.find({
             user: req.user._id,
-        }).populate("user", "name avtar");
+        }).populate("chatId", "chatName isGroupChat users");
+
+        notificationItems = await User.populate(notificationItems, {
+            path: "chatId.users",
+            select: "name",
+        });
         // .populate("chatId");
 
         if(notificationItems.length>0) {

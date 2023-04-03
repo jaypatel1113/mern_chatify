@@ -104,23 +104,3 @@ export const searchUsers = (userData) => async (dispatch) => {
         });
     }
 }
-
-export const addNotification = (notifications) => async (dispatch) => {
-    try {
-        dispatch({
-            type: "NOTIFICATION_REQUEST",
-        });
-
-        // const {data} = await client.get(`/api/user/getusers?search=${userData}`);
-
-        dispatch({
-            type: "NOTIFICATION_SUCCESS",
-            payload: notifications,
-        });
-    } catch (error) {
-        dispatch({
-            type: "NOTIFICATION_FAILURE",
-            payload: error.response.data.message,
-        });
-    }
-}

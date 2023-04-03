@@ -6,16 +6,16 @@ export const registerUser = async (req, res) => {
     try {
         const { fName, lName, email, password, avtar } = req.body;
 
-        // capitalize first word name
-        var firstName = fName[0].toUpperCase() + fName.substring(1);
-        var lastName = lName[0].toUpperCase() + lName.substring(1);
-        const name = firstName +  " " + lastName;
-
         let myCloud;
 
         if(!fName || !lName || !email || !password) {
             return res.status(403).json({ success: false, message: "Fill all details 🫤" });
         }
+        
+        // capitalize first word name
+        var firstName = fName[0].toUpperCase() + fName.substring(1);
+        var lastName = lName[0].toUpperCase() + lName.substring(1);
+        const name = firstName +  " " + lastName;
         
         const userExists = await User.findOne({email});
         if(userExists) {
