@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { userRoutes } from "./routes/userRoutes.js";
 import { chatRoutes } from "./routes/chatRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
+import { notificationRoutes } from "./routes/notificationRoutes.js";
 
 export const app = express();
 
@@ -22,3 +23,4 @@ app.use(cors({credentials: true, origin: ['http://localhost:3000', process.env.F
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/notification", notificationRoutes);
