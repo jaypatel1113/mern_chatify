@@ -13,6 +13,7 @@ _SocketIO_
 - One on One chat
 - Group Chat
 - Typing Indicator
+- Status Indicator (Send, Deliver or Seen)
 - Real Time Messaging
 - Real Time Notification 
 - Search other User
