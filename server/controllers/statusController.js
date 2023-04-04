@@ -32,6 +32,63 @@ export const initialStatus = async (req, res) => {
     }
 };
 
+export const deliverStatus = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({
+                    success: false,
+                    message: "Invalid data passed into request 🫤",
+                });
+        }
+        let initialStatus = await Status.find({
+            user: userId
+        });
+
+        initialStatus.forEach(async (statusOne) => {
+            await Status.findByIdAndUpdate(
+                    { _id: statusOne._id },
+                    { status: "deliver" },
+                    { new: true }
+                ) 
+        });
+            
+        res.status(200).json({ success: true, message: "status delivered" });
+    } catch (error) {
+        return res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+export const seenStatus = async (req, res) => {
+    try {
+        const { userId, chatId } = req.body;
+        
+        if (!userId || !chatId) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid data passed into request 🫤",
+            });
+        }
+        let initialStatus = await Status.find({
+            user: userId, 
+            chatId
+        });
+        initialStatus = initialStatus[0];
+
+        const seenItem = await Status.findByIdAndUpdate(
+            { _id: initialStatus._id },
+            { status: "seen" },
+            { new: true }
+        ) 
+
+        res.status(200).json({ success: true, message: "status seen", status: seenItem });
+        
+    } catch (error) {
+        return res.status(400).json({ success: false, message: error.message });
+    }
+}
+
 export const getStatus = async (req, res) => {
     try {
         var statusItems = await Status.find({chatId: req.query.chatId,})
@@ -39,37 +96,6 @@ export const getStatus = async (req, res) => {
             .populate("chatId", "chatName");
 
         res.status(200).json({ success: true, status: statusItems });
-    } catch (error) {
-        return res.status(400).json({ success: false, message: error.message });
-    }
-};
-
-export const updateStatus = async (req, res) => {
-    try {
-        const { status, chatId, userId } = req.body;
-
-        if (!status || !chatId || !userId) {
-            return res.status(400).json({
-                    success: false,
-                    message: "Invalid data passed into request 🫤",
-                });
-        }
-        let initialStatus = await Status.find({
-            user: userId,
-            chatId,
-        });
-        // res.status(200).json({ success: true, status: initialStatus,});
-        initialStatus = initialStatus[0];
-
-        var statusItem = await Status.findByIdAndUpdate(
-            { _id: initialStatus._id },
-            { status },
-            { new: true }
-        )
-            .populate("user", "name")
-            .populate("chatId", "chatName");
-            
-        res.status(200).json({ success: true, status: statusItem });
     } catch (error) {
         return res.status(400).json({ success: false, message: error.message });
     }
