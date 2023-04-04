@@ -107,7 +107,7 @@ export const getStatus = async (req, res) => {
         // console.log(chatId);
         var statusItems = await Status.find({chatId: req.query.chatId})
             .populate("user", "name")
-            .populate("chatId", "chatName")
+            .populate("chatId", "chatName isGroupChat")
             .find({ user: { $ne: req.user._id } });
 
         res.status(200).json({ success: true, status: statusItems });

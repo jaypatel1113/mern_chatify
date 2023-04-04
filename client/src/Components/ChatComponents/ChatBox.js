@@ -17,6 +17,7 @@ import { changeSelectedChat } from "../../Redux/Actions/Chat";
 import { getSender, getSenderFull } from "../../Config/ChatLogics";
 import { deleteNotification, fetchNotifications, sendNotification } from "../../Redux/Actions/Notification";
 import { getStatus, seenStatus, sentStatus } from "../../Redux/Actions/Status";
+import MessageStatus from "./MessageStatus";
 
 
 const ENDPOINT = process.env.REACT_APP_BACKEND_LINK;
@@ -57,13 +58,16 @@ const ChatBox = ({setMsg, msg}) => {
                 await dispatch(fetchAllMessages(selectedChat?._id));
                 await dispatch(seenStatus(user._id, selectedChatCompare._id));
                 socket.emit("join chat", selectedChat._id);
-                
-                await dispatch(getStatus(selectedChat?._id));
+                await dispatch(getStatus(selectedChatCompare?._id));
             }
             selectedChatCompare = selectedChat;
         }
         fetchData();
     }, [selectedChat, messages, dispatch]);
+
+    useEffect(()=>{
+        dispatch(getStatus(selectedChat?._id));
+    }, [isTyping, messages, selectedChat, msg, dispatch]);
 
     useEffect(() => {
         if(selectedChat !== null) {
@@ -180,7 +184,9 @@ const ChatBox = ({setMsg, msg}) => {
                 </Box>
 
                 {selectedChat !== null && !selectedChat?.isGroupChat && (
-                    <ProfileModal user={getSenderFull(user, selectedChat?.users)} >
+                    <ProfileModal
+                        user={getSenderFull(user, selectedChat?.users)}
+                    >
                         <IconButton
                             color="secondary"
                             style={{ fontWeight: 600, fontSize: 30 }}
@@ -217,13 +223,15 @@ const ChatBox = ({setMsg, msg}) => {
                 p={3}
             >
                 <Box sx={{ height: "100%", overflowY: "scroll" }}>
-                    {
-                        loading ? <LoadingMessageAnimation /> : <ScrollableChat messages={allMessages} />
-                    }
+                    {loading ? (
+                        <LoadingMessageAnimation />
+                    ) : (
+                        <ScrollableChat messages={allMessages} />
+                    )}
                 </Box>
-                <Box >
+                <Box>
                     {isTyping ? <TypingAnimation /> : <></>}
-                    
+                    <MessageStatus />
                     <TextField
                         className="inputRounded"
                         color="secondary"
