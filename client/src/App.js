@@ -19,13 +19,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 const App = () => {
-    const { message, error, isAuthenticated, initalLoading, isLogin, user } = useSelector((state) => state.user);
+    const { message, error, isAuthenticated, initalLoading, isLogin, user, isLogout } = useSelector((state) => state.user);
     const { message: chatMsg, error: chatErr } = useSelector((state) => state.chat);
     const { error: messErr } = useSelector((state) => state.message);
     const { error: notiErr, message: notiMess } = useSelector((state) => state.notifications);
     const { error: statErr } = useSelector((state) => state.status);
     
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({type: "CLEAR_CHAT_STATES"});
+        dispatch({type: "CLEAR_MSG_STATES"});
+        dispatch({type: "CLEAR_NOTIFICATION_STATES"}); 
+        dispatch({type: "CLEAR_STATUS_STATES"}); 
+    }, [isLogout, dispatch]);
 
     useEffect(() => {
         const loadData = async () => {

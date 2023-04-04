@@ -51,6 +51,7 @@ export const userReducer = createReducer(initialState, {
 
     LOGOUT_REQUEST: (state) => {
         state.loading = true;
+        state.isLogout = false;
     },
     LOGOUT_SUCCESS: (state, action) => {
         state.loading = false;
@@ -58,11 +59,13 @@ export const userReducer = createReducer(initialState, {
         state.user = null;
         state.isLogin = false;
         state.message = action.payload;
+        state.isLogout = true;
     },
     LOGOUT_FAILURE: (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
         state.error = action.payload;
+        state.isLogout = false;
     },
 
     SEARCH_REQUEST: (state) => {

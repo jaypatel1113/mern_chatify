@@ -47,4 +47,6 @@ export const notificationReducer = createReducer(initialState, {
     CLEAR_MESSAGE: (state) => {
         state.message = null;
     },
+    
+    CLEAR_NOTIFICATION_STATES: () => initialState,
 });

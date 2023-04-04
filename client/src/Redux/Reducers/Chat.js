@@ -96,4 +96,6 @@ export const chatReducer = createReducer(initialState, {
     CLEAR_MESSAGE: (state) => {
         state.message = null;
     },
+
+    CLEAR_CHAT_STATES: () => initialState,
 });

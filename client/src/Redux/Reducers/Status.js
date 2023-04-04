@@ -57,4 +57,6 @@ export const statusReducer = createReducer(initialState, {
     // CLEAR_MESSAGE: (state) => {
     //     state.message = null;
     // },
+
+    CLEAR_STATUS_STATES: () => initialState,
 });

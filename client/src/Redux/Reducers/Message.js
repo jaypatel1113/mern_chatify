@@ -33,4 +33,6 @@ export const messageReducer = createReducer(initialState, {
     CLEAR_ERROR: (state) => {
         state.error = null;
     },
+
+    CLEAR_MSG_STATES: () => initialState,
 });
