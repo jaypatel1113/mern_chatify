@@ -13,15 +13,17 @@ import AuthRoutes from "./ProtectedRoutes/AuthRoutes";
 import { getUser } from "./Redux/Actions/User";
 import { fetchAllChats } from "./Redux/Actions/Chat";
 import { fetchNotifications } from "./Redux/Actions/Notification";
+import { deliverStatus } from "./Redux/Actions/Status";
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 const App = () => {
-    const { message, error, isAuthenticated, initalLoading, isLogin } = useSelector((state) => state.user);
+    const { message, error, isAuthenticated, initalLoading, isLogin, user } = useSelector((state) => state.user);
     const { message: chatMsg, error: chatErr } = useSelector((state) => state.chat);
     const { error: messErr } = useSelector((state) => state.message);
     const { error: notiErr, message: notiMess } = useSelector((state) => state.notifications);
+    const { error: statErr } = useSelector((state) => state.status);
     
     const dispatch = useDispatch();
 
@@ -33,6 +35,12 @@ const App = () => {
         }
         loadData();
     }, [isLogin, dispatch]);
+
+    useEffect(() => {
+        if(user) {
+            dispatch(deliverStatus(user?._id));
+        }
+    }, [user, dispatch]);
 
     // display messages and errors from backend in all components
     useEffect(() => {
@@ -52,6 +60,10 @@ const App = () => {
             // toast.success(notiErr, {toastId: notiErr});
             dispatch({ type: "CLEAR_ERROR" });
         }
+        if (statErr) {
+            // toast.success(statErr, {toastId: statErr});
+            dispatch({ type: "CLEAR_ERROR" });
+        }
         if (message) {
             toast.success(message, {toastId: message});
             dispatch({ type: "CLEAR_MESSAGE" });
@@ -64,7 +76,7 @@ const App = () => {
             // toast.success(notiMess, {toastId: notiMess});
             dispatch({ type: "CLEAR_MESSAGE" });
         }
-    }, [error, message, notiErr, messErr, chatErr, chatMsg, notiMess, dispatch]);
+    }, [error, message, notiErr, messErr, chatErr, statErr, chatMsg, notiMess, dispatch]);
 
     return (
         <>

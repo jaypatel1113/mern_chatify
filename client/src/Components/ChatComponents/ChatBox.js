@@ -16,6 +16,7 @@ import { fetchAllMessages, sendMessage } from "../../Redux/Actions/Message";
 import { changeSelectedChat } from "../../Redux/Actions/Chat";
 import { getSender, getSenderFull } from "../../Config/ChatLogics";
 import { deleteNotification, fetchNotifications, sendNotification } from "../../Redux/Actions/Notification";
+import { getStatus, seenStatus, sentStatus } from "../../Redux/Actions/Status";
 
 
 const ENDPOINT = process.env.REACT_APP_BACKEND_LINK;
@@ -54,7 +55,10 @@ const ChatBox = ({setMsg, msg}) => {
         const fetchData = async () => {
             if(selectedChat !== null) {
                 await dispatch(fetchAllMessages(selectedChat?._id));
+                await dispatch(seenStatus(user._id, selectedChatCompare._id));
                 socket.emit("join chat", selectedChat._id);
+                
+                await dispatch(getStatus(selectedChat?._id));
             }
             selectedChatCompare = selectedChat;
         }
@@ -93,6 +97,7 @@ const ChatBox = ({setMsg, msg}) => {
             setDisableTextField(false);
 
             dispatch(sendNotification(selectedChatCompare._id));
+            dispatch(sentStatus(selectedChatCompare._id));
         }
     };
     const typingHandler = (e) => {

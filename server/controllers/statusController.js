@@ -19,12 +19,20 @@ export const initialStatus = async (req, res) => {
             if (user._id.equals(req.user._id)) {
                 return;
             }
-            var initialStatus = await Status.create({
+            var initialStatus = await Status.findOne({
                 user: user._id,
                 chatId,
-                status: "sent",
             });
-            initialStatus = await initialStatus.populate("user", "name avtar");
+
+            if(initialStatus) {
+                await Status.findByIdAndUpdate({_id: initialStatus._id},{status: "sent"},{new: true});
+            } else {
+                await Status.create({
+                    user: user._id,
+                    chatId,
+                    status: "sent",
+                });
+            }
         });
         res.status(200).json({ success: true, message: "Status Created" });
     } catch (error) {
@@ -46,10 +54,14 @@ export const deliverStatus = async (req, res) => {
             user: userId
         });
 
+
         initialStatus.forEach(async (statusOne) => {
+            if(statusOne.status === "seen") {
+                return;
+            }
             await Status.findByIdAndUpdate(
                     { _id: statusOne._id },
-                    { status: "deliver" },
+                    { status: "delivered" },
                     { new: true }
                 ) 
         });
@@ -91,9 +103,12 @@ export const seenStatus = async (req, res) => {
 
 export const getStatus = async (req, res) => {
     try {
-        var statusItems = await Status.find({chatId: req.query.chatId,})
+        // const {chatId} = req?.query?.chatId;
+        // console.log(chatId);
+        var statusItems = await Status.find({chatId: req.query.chatId})
             .populate("user", "name")
-            .populate("chatId", "chatName");
+            .populate("chatId", "chatName")
+            .find({ user: { $ne: req.user._id } });
 
         res.status(200).json({ success: true, status: statusItems });
     } catch (error) {

@@ -9,6 +9,7 @@ import GroupChatModel from "../SubComponents/Models/GroupChatModel";
 import DisplayDateTime from "../SubComponents/DisplayDateTime";
 import LoadingChatAnimation from "../SubComponents/Animations/LoadingChatAnimation";
 import { getSender, getSenderAvtarUrl } from "../../Config/ChatLogics";
+import { deliverStatus } from "../../Redux/Actions/Status";
 
 
 const MyChats = () => {
@@ -27,6 +28,10 @@ const MyChats = () => {
         };
         fetchChats();
     }, [selectedChat, notifications, messages, dispatch]);
+
+    useEffect(() => {
+        dispatch(deliverStatus(user._id));
+    }, [user._id, dispatch]);
 
     return (
         <>
@@ -144,10 +149,10 @@ const MyChats = () => {
                                                         <Typography fontSize={12}>
                                                             {
                                                                 chat?.latestMessage?.sender._id === user._id 
-                                                                ? "You" 
-                                                                : chat?.latestMessage?.sender.name.split(" ")[0]
+                                                                ? <>You </>
+                                                                : <>{chat?.latestMessage?.sender.name.split(" ")[0]} </>
                                                             }
-                                                            : 
+                                                            :&nbsp;
                                                             {
                                                                 chat?.latestMessage?.content.length > 25
                                                                 ? `${chat?.latestMessage?.content.slice(0, 25)}...` 

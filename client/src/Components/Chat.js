@@ -8,6 +8,7 @@ import TopMenu from "./ChatComponents/TopMenu";
 import NotificationMenu from "./SubComponents/NotificationMenu";
 
 import {fetchNotifications } from "../Redux/Actions/Notification";
+import { deliverStatus, getStatus } from "../Redux/Actions/Status";
 
 const Chat = () => {
     const [showChatList, setShowChatList] = useState(true);
@@ -23,7 +24,14 @@ const Chat = () => {
     }, [selectedChat]);
     
     useEffect(() => {
-        dispatch(fetchNotifications());
+        const fetchData = async () => {
+            await dispatch(fetchNotifications());
+            await dispatch(deliverStatus(user._id));
+            if(selectedChat) {
+                await dispatch(getStatus(selectedChat?._id));
+            }
+        }
+        fetchData();
     }, [msg, dispatch]);
 
     return (
