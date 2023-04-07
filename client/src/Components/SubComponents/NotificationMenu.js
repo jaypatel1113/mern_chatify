@@ -23,7 +23,7 @@ const NotificationMenu = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     position: "absolute",
-                    bottom: 45,
+                    bottom: 25,
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "100%",
