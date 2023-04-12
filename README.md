@@ -1,14 +1,14 @@
-# CHATIFY
+# ${\color{#676ddf}CHATIFY}$
 
 
-#### Created using :
+#### ${\color{#87CEEB}Created \space using \space :}$
 - ${\color{#80ED99}MongoDB}$
 - ${\color{#80ED99}NodeJS}$
 - ${\color{#80ED99}ExpressJS}$
 - ${\color{#80ED99}ReactJS \space (Material \space UI)}$
 - ${\color{#80ED99}SocketIO}$
 
-## Functionality
+## ${\color{#87CEEB}Functionality}$
 - ${\color{#EF476F}Authentication}$
 - ${\color{#EF476F}One \space on \space One \space chat}$
 - ${\color{#EF476F}Group \space Chat}$
