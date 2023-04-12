@@ -19,7 +19,3 @@
 - ${\color{#EF476F}Real \space Time \space Messaging}$
 - ${\color{#EF476F}Search \space other \space User}$
 - ${\color{#EF476F}Add \space and \space Remove \space from \space Group \space (Only \space Group \space Admin)}$
-
-
-80ED99
-87CEEB
