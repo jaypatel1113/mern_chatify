@@ -73,7 +73,7 @@ export const fetchNotifications = async (req, res) => {
     try {
         var notificationItems = await Notification.find({
             user: req.user._id,
-        }).populate("chatId", "chatName isGroupChat users");
+        }).populate("chatId", "chatName isGroupChat users sharedSecketKey");
 
         notificationItems = await User.populate(notificationItems, {
             path: "chatId.users",

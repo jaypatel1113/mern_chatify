@@ -12,9 +12,10 @@ _SocketIO_
 - Authentication
 - One on One chat
 - Group Chat
-- Typing Indicator
-- Status Indicator (Send, Deliver or Seen)
+- **End to End Encryption**
+- **Typing Indicator**
+- **Status Indicator (Send, Deliver or Seen)**
+- **Real Time Notification**
 - Real Time Messaging
-- Real Time Notification 
 - Search other User
 - Add and Remove from Group (Only Group Admin)

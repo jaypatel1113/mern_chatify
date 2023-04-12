@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import { Chat } from "../model/chatModel.js";
 import { User } from "../model/userModel.js";
 
@@ -29,10 +31,13 @@ export const createChat = async (req, res) => {
         if(isChat.length > 0) {
             return res.status(200).json({ success: true, message: "Chat Fetched ✅", chat: isChat[0] });
         } else {
+            const sharedSecketKey = crypto.randomBytes(32).toString('hex');
+
             var chatData = {
                 chatName: "OneOnOne",
                 isGroupChat: false,
-                users: [req.user._id, userId]
+                users: [req.user._id, userId],
+                sharedSecketKey
             }
             const chatCreate = await Chat.create(chatData);
 
@@ -84,11 +89,14 @@ export const createGroupChat = async (req, res) => {
 
         users.push(req.user);
 
+        const sharedSecketKey = crypto.randomBytes(32).toString('hex');
+
         const groupChat = await Chat.create({
             chatName,
             users,
             isGroupChat: true,
             groupAdmin: req.user,
+            sharedSecketKey
         });
 
         const fullGroupChat = await Chat.findById(groupChat._id)

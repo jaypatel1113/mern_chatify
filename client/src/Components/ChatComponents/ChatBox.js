@@ -17,6 +17,7 @@ import { changeSelectedChat } from "../../Redux/Actions/Chat";
 import { getSender, getSenderFull } from "../../Config/ChatLogics";
 import { deleteNotification, fetchNotifications, sendNotification } from "../../Redux/Actions/Notification";
 import { getStatus, seenStatus, sentStatus } from "../../Redux/Actions/Status";
+import { encryptMsg } from "../../Config/AES";
 import MessageStatus from "./MessageStatus";
 
 
@@ -30,6 +31,7 @@ const ChatBox = ({setMsg, msg}) => {
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [disableTextField, setDisableTextField] = useState(false);
+    const [decodedMessages, setDecodedMessages] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -83,7 +85,6 @@ const ChatBox = ({setMsg, msg}) => {
     }, [selectedChat?._id, dispatch, selectedChat]);
 
 
-
     const handleClick = () => {
         dispatch(changeSelectedChat(null));
     };
@@ -93,7 +94,8 @@ const ChatBox = ({setMsg, msg}) => {
             socket.emit("stop typing", selectedChat._id);
 
             setNewMessage("");
-            const data = await dispatch(sendMessage(newMessage, selectedChat._id));
+            const encMsg = encryptMsg(selectedChat?.sharedSecketKey, newMessage);
+            const data = await dispatch(sendMessage(encMsg, selectedChat._id));
             setMessages([...messages, newMessage]);
 
             // sent msg fetch from store and sent to server
@@ -226,7 +228,7 @@ const ChatBox = ({setMsg, msg}) => {
                     {loading ? (
                         <LoadingMessageAnimation />
                     ) : (
-                        <ScrollableChat messages={allMessages} />
+                        <ScrollableChat messages={allMessages} secretKey={selectedChat?.sharedSecketKey} />
                     )}
                 </Box>
                 <Box>

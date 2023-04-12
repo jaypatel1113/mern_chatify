@@ -10,6 +10,7 @@ import DisplayDateTime from "../SubComponents/DisplayDateTime";
 import LoadingChatAnimation from "../SubComponents/Animations/LoadingChatAnimation";
 import { getSender, getSenderAvtarUrl } from "../../Config/ChatLogics";
 import { deliverStatus } from "../../Redux/Actions/Status";
+import { decryptMsg } from "../../Config/AES";
 
 
 const MyChats = () => {
@@ -154,9 +155,9 @@ const MyChats = () => {
                                                             }
                                                             :&nbsp;
                                                             {
-                                                                chat?.latestMessage?.content.length > 25
-                                                                ? `${chat?.latestMessage?.content.slice(0, 25)}...` 
-                                                                : chat?.latestMessage?.content 
+                                                                decryptMsg(chat?.sharedSecketKey, chat?.latestMessage?.content).length > 23
+                                                                ? `${decryptMsg(chat?.sharedSecketKey, chat?.latestMessage?.content).slice(0, 23)}...` 
+                                                                : decryptMsg(chat?.sharedSecketKey, chat?.latestMessage?.content) 
                                                             }
                                                         </Typography>
                                                     )

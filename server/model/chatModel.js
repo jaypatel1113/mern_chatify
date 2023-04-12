@@ -10,6 +10,7 @@ const chatModel = mongoose.Schema(
             ref: "Message",
         },
         groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        sharedSecketKey: {type: String, trim: true, require: true}
     },
     { timestamps: true }
 );
