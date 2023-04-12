@@ -9,13 +9,13 @@
 - ${\color{#80ED99}SocketIO}$
 
 ## ${\color{#87CEEB}Functionality}$
-- ${\color{#EF476F}Authentication}$
-- ${\color{#EF476F}One \space on \space One \space chat}$
-- ${\color{#EF476F}Group \space Chat}$
-- ${\color{#FAC748}End \space to \space End \space Encryption}$
-- ${\color{#FAC748}Typing \space Indicator}$
-- ${\color{#FAC748}Status \space Indicator \space (Send, \space Deliver \space or \space Seen)}$
-- ${\color{#FAC748}Real \space Time \space Notification}$
-- ${\color{#EF476F}Real \space Time \space Messaging}$
-- ${\color{#EF476F}Search \space other \space User}$
+- ${\color{#FAC748}Authentication}$
+- ${\color{#FAC748}One \space on \space One \space chat}$
+- ${\color{#FAC748}Group \space Chat}$
 - ${\color{#EF476F}Add \space and \space Remove \space from \space Group \space (Only \space Group \space Admin)}$
+- ${\color{#EF476F}End \space to \space End \space Encryption}$
+- ${\color{#EF476F}Typing \space Indicator}$
+- ${\color{#EF476F}Status \space Indicator \space (Send, \space Deliver \space or \space Seen)}$
+- ${\color{#EF476F}Real \space Time \space Notification}$
+- ${\color{#FAC748}Real \space Time \space Messaging}$
+- ${\color{#FAC748}Search \space other \space User}$
