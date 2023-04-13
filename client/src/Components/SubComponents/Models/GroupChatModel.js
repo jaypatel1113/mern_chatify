@@ -43,12 +43,22 @@ const GroupChatModel = ({ children }) => {
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        let searchRsltTimeout;
+        if(search) {
+            searchRsltTimeout = setTimeout(() => {
+                dispatch(searchUsers(search));
+            }, 1000);
+        }
+
+        return () => clearTimeout(searchRsltTimeout);
+    }, [search, dispatch]);
+
     const handleSearch = async (query) => {
         setSearch(query);
         if (!query) return dispatch({ type: "CLEAR_SEARCH_RESULT" });
-
-        dispatch(searchUsers(query));
     };
+
     const handleGroupAdd = (user) => {
         const isIncluded = selectedUsers.find((oneUser) => oneUser._id === user._id) ? true : false;
         if (isIncluded) {

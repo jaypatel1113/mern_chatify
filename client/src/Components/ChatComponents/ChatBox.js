@@ -121,11 +121,11 @@ const ChatBox = ({setMsg, msg}) => {
         let lastTypingTime = new Date().getTime();
         var timerLength = 3000;
         setTimeout(() => {
-        var timeNow = new Date().getTime();
-        var timeDiff = timeNow - lastTypingTime;
-        if (timeDiff >= timerLength && typing) {
-            socket.emit("stop typing", selectedChat._id);
-            setTyping(false);
+            var timeNow = new Date().getTime();
+            var timeDiff = timeNow - lastTypingTime;
+            if (timeDiff >= timerLength && typing) {
+                socket.emit("stop typing", selectedChat._id);
+                setTyping(false);
         }
         }, timerLength);
     };
